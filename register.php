@@ -9,6 +9,8 @@ if(isset( $_POST['register'])) {
 $userName = filter_var($_POST["userName"], FILTER_SANITIZE_STRING );
 $userEmail = filter_var($_POST["userEmail"], FILTER_SANITIZE_EMAIL );
 $password = filter_var($_POST["password"], FILTER_SANITIZE_STRING );
+$userType = filter_var($_POST["userType"], FILTER_SANITIZE_STRING );
+
 $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
 
  if( filter_var($userEmail, FILTER_SANITIZE_STRING) ) {
@@ -22,8 +24,8 @@ $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
         // echo "Email already in use <br>";
         $emailTaken = "Email already been taken";
     } else {
-        $stmt = $pdo -> prepare('INSERT into users (name, email, password) VALUES(? , ?, ? ) ');
-        $stmt -> execute( [$userName, $userEmail, $passwordHashed] );
+        $stmt = $pdo -> prepare('INSERT into users (name, email, password, role) VALUES (?, ?, ?, ?) ');
+        $stmt -> execute( [$userName, $userEmail, $passwordHashed, $userType] );
         header('Location: http://localhost/login/index.php');
     }
  }
@@ -51,9 +53,16 @@ $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
             <?php } $emailTaken ?>
          </div>
          <div class="form-group">
+         <select name="userType">
+         <option value="user">user</option>
+         <option value="admin">admin</option>
+      </select>
+         </div>
+         <div class="form-group">
            <label for="password">Password</label>
             <input required type="password" name="password" class="form-control" />
          </div>
+         <br/>
          <button name="register" type="submit" class="btn btn-primary">Register</button>
        </form>
      </div>

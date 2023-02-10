@@ -15,6 +15,8 @@ $user = $stmt -> FETCH();
     if( password_verify($password, $user -> password )) {
       echo "Password correct";
       $_SESSION['userId'] = $user-> id;
+      $_SESSION['userType'] = $user-> role;
+      $_SESSION['userName'] = $user-> name;
     //   redirects to the home page
       header('Location: http://localhost/login/index.php');
     } else {
