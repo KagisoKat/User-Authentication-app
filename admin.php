@@ -7,16 +7,13 @@ if(isset($_SESSION['userId'])) {
 
  $userId = $_SESSION['userId'];
 
- $stmt = $pdo -> prepare('SELECT * FROM users WHERE id = ? ');
- $stmt -> execute( [ $userId ]);
+ $stmt = $pdo -> prepare('SELECT books.book_name, authors.author_name, books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id = authors.author_id');
+ $stmt -> execute();
 
- $user = $stmt ->fetch(); 
+ $books = $stmt ->fetchAll(); 
 
- if ($user->role === 'admin' ) {
+ if ($_SESSION['userType'] === 'admin' ) {
     $message = "Your role is admin";
-}
-
-
 }
 
 ?>
@@ -45,8 +42,35 @@ if(isset($_SESSION['userId'])) {
       <h1>Welcome <span><?php echo $_SESSION['userName'] ?></span></h1>
       <p>This is an Admin page</p>
 
-   </div>
 
+      
+   </div>
+   <div>
+   <table>
+    <tr>
+        <th>Name</th>
+        <th>Year</th>
+        <th>Genre</th>
+        <th>Age Group</th>
+    </tr>
+
+
+<?php
+    // output data of each row
+    foreach($books as $book) {
+    //   var_dump($book);
+      echo "<tr>";
+      echo "<td>" . $book->book_name . "</td>";
+      echo "<td>" . $book->author_name . "</td>";
+      echo "<td>" . $book->book_year . "</td>";
+      echo "<td>" . $book->book_genre . "</td>";
+      echo "<td>" . $book->book_age_group . "</td>";
+      echo "</tr>";
+    }
+}
+?>
+</table>
+</div>
 </div>
 
 </body>

@@ -3,23 +3,28 @@
 session_start();
 
 if(isset($_SESSION['userId'])) {
+    $userId = $_SESSION['userId'];
+    if(isset( $_POST['register'])) {
+        require('./config/db.php');
+        $searchString = filter_var($_POST["searchText"], FILTER_SANITIZE_STRING );
+        $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group FROM books WHERE book_name LIKE "%?%" ');
+        $stmt -> execute();
+
+    } else {
  require('./config/db.php');
 
- $userId = $_SESSION['userId'];
 
- $stmt = $pdo -> prepare('SELECT * FROM users WHERE id = ? ');
- $stmt -> execute( [ $userId ]);
 
- $user = $stmt ->fetch(); 
+ $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group FROM books ');
+ $stmt -> execute();}
 
- if ($user->role === 'admin' ) {
-    $message = "Your role is admin";
+ $books = $stmt->fetchAll(); 
+
+ if ($_SESSION['userType'] === 'user' ) {
+    $message = "Your role is user";
 }
-
-
-}
-
 ?>
+
 
  <?php require('./inc/header.html'); ?>
 
@@ -41,12 +46,37 @@ if(isset($_SESSION['userId'])) {
 <div class="container">
 
    <div class="content">
+    <input type="text">
+    <button name="register" type="submit" class="btn btn-primary">Search</button>
       <h3>Hi, <span>Member</span></h3>
       <h1>Welcome <span><?php echo $_SESSION['userName'] ?></span></h1>
       <p>This is a Members page</p>
 
    </div>
+   <div>
+   <table>
+    <tr>
+        <th>Name</th>
+        <th>Year</th>
+        <th>Genre</th>
+        <th>Age Group</th>
+    </tr>
 
+
+<?php
+    // output data of each row
+    foreach($books as $book) {
+      echo "<tr>";
+      echo "<td>" . $book->book_name . "</td>";
+      echo "<td>" . $book->book_year . "</td>";
+      echo "<td>" . $book->book_genre . "</td>";
+      echo "<td>" . $book->book_age_group . "</td>";
+      echo "</tr>";
+    }
+}
+?>
+</table>
+</div>
 </div>
 
 </body>
