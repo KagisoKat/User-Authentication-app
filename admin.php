@@ -7,7 +7,7 @@ if(isset($_SESSION['userId'])) {
     if(isset( $_POST['search'])) {
         require('./config/db.php');
         $searchString = "%" . filter_var($_POST["searchText"], FILTER_SANITIZE_STRING ) . "%";
-        $stmt = $pdo -> prepare('SELECT books.book_name, books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.id WHERE books.book_name LIKE :ss OR authors.author_name LIKE :ss  GROUP BY book_genre ORDER BY book_name,author_name ');
+        $stmt = $pdo -> prepare('SELECT books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id WHERE books.book_name LIKE :ss OR authors.author_name LIKE :ss ORDER BY book_name,author_name, book_genre ');
         $stmt->bindValue(':ss', $searchString);
         $stmt -> execute();
 
@@ -16,7 +16,7 @@ if(isset($_SESSION['userId'])) {
 
 
 
- $stmt = $pdo -> prepare('SELECT books.book_name, books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.id  GROUP BY book_genre ORDER BY book_name,author_name ');
+ $stmt = $pdo -> prepare('SELECT books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id ORDER BY book_name,author_name, book_genre');
  $stmt -> execute();
 }
 
@@ -48,7 +48,7 @@ if(isset($_SESSION['userId'])) {
 <div class="container">
 
    <div class="content">
-   <form  method="post" name="searchForm" action="user.php">
+   <form  method="post" name="searchForm" action="admin.php">
 
    <input type="text" name="searchText" class="form-control" />
    <button name="search" type="submit" class="btn btn-primary">Search</button>
@@ -75,6 +75,7 @@ if(isset($_SESSION['userId'])) {
     foreach($books as $book) {
       echo "<tr>";
       echo "<td>" . $book->book_name . "</td>";
+      echo "<td>" . $book->author_name . "</td>";
       echo "<td>" . $book->book_year . "</td>";
       echo "<td>" . $book->book_genre . "</td>";
       echo "<td>" . $book->book_age_group . "</td>";

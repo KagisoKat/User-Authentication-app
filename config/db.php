@@ -3,7 +3,7 @@
 $host = 'localhost';
 $user = 'root';
 $password = '';
-$dbname = 'login';
+$dbname = 'library';
 
 //set DSN - database source name
 $dsn = 'mysql:host=' . $host .'; dbname=' . $dbname;

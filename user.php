@@ -7,7 +7,7 @@ if(isset($_SESSION['userId'])) {
     if(isset( $_POST['search'])) {
         require('./config/db.php');
         $searchString = "%" . filter_var($_POST["searchText"], FILTER_SANITIZE_STRING ) . "%";
-        $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group FROM books WHERE book_name LIKE :ss GROUP BY book_genre ORDER BY book_name ');
+        $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group FROM books WHERE book_name LIKE :ss ORDER BY book_name, book_genre ');
         $stmt->bindValue(':ss', $searchString);
         $stmt -> execute();
 
@@ -16,7 +16,7 @@ if(isset($_SESSION['userId'])) {
 
 
 
- $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group FROM books ');
+ $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group FROM books  ORDER BY book_name, book_genre');
  $stmt -> execute();
 }
 
