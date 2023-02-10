@@ -1,34 +1,23 @@
 <?php
 
-if(isset( $_POST['register'])) {
- require('./config/db.php');
+if(isset( $_POST['registerBook'])) {
 
+    require('./config/db.php');
 //  $userName = $_POST["userName"];
 //  $userEmail = $_POST["userEmail"];
 //  $password = $_POST["password"];
-$userName = filter_var($_POST["userName"], FILTER_SANITIZE_STRING );
-$userEmail = filter_var($_POST["userEmail"], FILTER_SANITIZE_EMAIL );
-$password = filter_var($_POST["password"], FILTER_SANITIZE_STRING );
-$userType = filter_var($_POST["userType"], FILTER_SANITIZE_STRING );
+$bookName = filter_var($_POST["bookName"], FILTER_SANITIZE_STRING );
+$bookYear = filter_var($_POST["bookYear"], FILTER_SANITIZE_EMAIL );
+$bookGenre = filter_var($_POST["bookGenre"], FILTER_SANITIZE_STRING );
+$bookAgeGroup = filter_var($_POST["bookAgeGroup"], FILTER_SANITIZE_STRING );
+$authorId = filter_var($_POST["authorId"], FILTER_SANITIZE_STRING );
 
-$passwordHashed = password_hash($password, PASSWORD_DEFAULT);
 
- if( filter_var($userEmail, FILTER_SANITIZE_STRING) ) {
-    $stmt = $pdo -> prepare('SELECT * from users WHERE email = ? ');
-    $stmt -> execute( [$userEmail] );
-    $totalUsers = $stmt -> rowCount();
 
-    // echo $totalUsers . '<br>';
+        // $stmt = $pdo -> prepare('INSERT into users (name, email, password, role) VALUES (?, ?, ?, ?) ');
+        // $stmt -> execute( [$userName, $userEmail, $passwordHashed, $userType] );
+        // header('Location: http://localhost/login/index.php');
 
-    if( $totalUsers > 0 ) {
-        // echo "Email already in use <br>";
-        $emailTaken = "Email already been taken";
-    } else {
-        $stmt = $pdo -> prepare('INSERT into users (name, email, password, role) VALUES (?, ?, ?, ?) ');
-        $stmt -> execute( [$userName, $userEmail, $passwordHashed, $userType] );
-        header('Location: http://localhost/login/index.php');
-    }
- }
 }
 ?>
 
@@ -63,20 +52,22 @@ $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
 
          </div>
          <div class="form-group">
-         <select name="author">
+         <select name="authorId">
          <?php
-                 $stmt = $pdo -> prepare('SELECT author_id, author_name FROM authors');
-                 $stmt -> execute();
-                 $books = $stmt->fetchAll(); 
-         <option value="user">user</option>
-         <option value="admin">admin</option>
+            require('./config/db.php');
+                 $stmt2 = $pdo -> prepare('SELECT author_id, author_name FROM authors');
+                 $stmt2 -> execute();
+                 $authors = $stmt2->fetchAll(); 
+                 foreach($authors as $author) {
+                 echo '<option value="' . $author->author_id . '">' .$author->author_name . '</option>';
+                 }
          ?>
       </select>
          </div>
          <div class="form-group">
 
          <br/>
-         <button name="register" type="submit" class="btn btn-primary">Register</button>
+         <button name="registerBook" type="submit" class="btn btn-primary">Register Book</button>
        </form>
      </div>
     </div>
