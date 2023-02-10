@@ -79,6 +79,8 @@ if(isset($_SESSION['userId'])) {
       echo "<td>" . $book->book_year . "</td>";
       echo "<td>" . $book->book_genre . "</td>";
       echo "<td>" . $book->book_age_group . "</td>";
+      echo "<td><button>Edit</button></td>";
+      echo "<td><button>Delete</button></td>";
       echo "</tr>";
     }
 }
