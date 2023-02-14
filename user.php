@@ -20,7 +20,7 @@ if(isset($_SESSION['userId'])) {
  $stmt -> execute();
 }
 
- $books = $stmt->fetchAll(); 
+ $books = $stmt->fetchAll();
 
  if ($_SESSION['userType'] === 'user' ) {
     $message = "Your role is user";
@@ -44,14 +44,15 @@ if(isset($_SESSION['userId'])) {
 
 </head>
 <body>
-   
+
 <div class="container">
 
    <div class="content">
    <form  method="post" name="searchForm" action="user.php">
 
-   <input type="text" name="searchText" class="form-control" />
-   <button name="search" type="submit" class="btn btn-primary">Search</button>
+   <input type="text" name="searchText" class="form-control mt-2" />
+   <button name="search" type="submit" class="btn btn-primary mt-2 mb-2" >Search</button>
+   <br/>
    </form>
 
       <h3>Hi, <span>Member</span></h3>
@@ -60,7 +61,7 @@ if(isset($_SESSION['userId'])) {
 
    </div>
    <div>
-   <table>
+   <table border="1" width="100%">
     <tr>
         <th>Name</th>
         <th>Year</th>

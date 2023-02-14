@@ -61,7 +61,7 @@ $user = $stmt -> FETCH();
            <label for="password">Password</label>
             <input required type="password" name="password" class="form-control" />
          </div>
-         <button name="login" type="submit" class="btn btn-primary">Login</button>
+         <button name="login" type="submit" class="btn btn-primary mt-2">Login</button>
        </form>
      </div>
     </div>

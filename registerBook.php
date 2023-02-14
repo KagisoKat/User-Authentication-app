@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 if(isset( $_POST['registerBook'])) {
 
     require('./config/db.php');
@@ -14,9 +14,9 @@ $authorId = filter_var($_POST["authorId"], FILTER_SANITIZE_STRING );
 
 
 
-        // $stmt = $pdo -> prepare('INSERT into users (name, email, password, role) VALUES (?, ?, ?, ?) ');
-        // $stmt -> execute( [$userName, $userEmail, $passwordHashed, $userType] );
-        // header('Location: http://localhost/login/index.php');
+        $stmt = $pdo -> prepare('INSERT into books (book_name, book_year, book_genre, book_age_group, author_id) VALUES (?, ?, ?, ?,?) ');
+        $stmt -> execute( [$bookName, $bookYear, $bookGenre, $bookAgeGroup,$authorId] );
+        header('Location: http://localhost/login/admin.php');
 
 }
 ?>
