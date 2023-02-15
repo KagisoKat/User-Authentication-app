@@ -1,3 +1,5 @@
+<!-- for librarians to login and view books and authors, etc -->
+
 <?php
 
 session_start();

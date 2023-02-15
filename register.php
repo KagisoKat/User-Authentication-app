@@ -31,7 +31,7 @@ $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
  }
 }
 ?>
-
+<!-- the register page for both members and librarians -->
  <?php require('./inc/header.html'); ?>
 
 

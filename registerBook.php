@@ -1,3 +1,4 @@
+<!-- for librarian to register books -->
 <?php
 session_start();
 if(isset( $_POST['registerBook'])) {

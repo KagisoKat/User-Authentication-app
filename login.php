@@ -1,3 +1,5 @@
+<!-- login page for both members and librarians -->
+
 <?php
 session_start();
 

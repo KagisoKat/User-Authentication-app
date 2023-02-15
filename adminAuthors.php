@@ -1,3 +1,5 @@
+<!-- for librarians to edit and add authors -->
+
 <?php
 
 session_start();
