@@ -54,8 +54,8 @@ $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
          </div>
          <div class="form-group">
          <select name="userType">
-         <option value="user">user</option>
-         <option value="admin">admin</option>
+         <option value="member">Member</option>
+         <option value="librarian">Librarian</option>
       </select>
          </div>
          <div class="form-group">

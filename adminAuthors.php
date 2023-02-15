@@ -7,7 +7,7 @@ if(isset($_SESSION['userId'])) {
     if(isset( $_POST['search'])) {
         require('./config/db.php');
         $searchString = "%" . filter_var($_POST["searchText"], FILTER_SANITIZE_STRING ) . "%";
-        $stmt = $pdo -> prepare('SELECT authors.author_name, authors.author_age, authors.author_genre FROM  authors WHERE authors.author_name LIKE :ss ORDER BY author_name');
+        $stmt = $pdo -> prepare('SELECT authors.author_id, authors.author_name, authors.author_age, authors.author_genre FROM  authors WHERE authors.author_name LIKE :ss ORDER BY author_name');
         $stmt->bindValue(':ss', $searchString);
         $stmt -> execute();
 
@@ -16,13 +16,13 @@ if(isset($_SESSION['userId'])) {
 
 
 
- $stmt = $pdo -> prepare('SELECT authors.author_name, authors.author_age, authors.author_genre FROM  authors ORDER BY author_name');
+ $stmt = $pdo -> prepare('SELECT authors.author_id, authors.author_name, authors.author_age, authors.author_genre FROM  authors ORDER BY author_name');
  $stmt -> execute();
 }
 
- $books = $stmt->fetchAll(); 
+ $authors = $stmt->fetchAll(); 
 
- if ($_SESSION['userType'] === 'admin' ) {
+ if ($_SESSION['userType'] === 'librarian' ) {
     $message = "Your role is Librarian";
 }
 ?>
@@ -66,24 +66,20 @@ if(isset($_SESSION['userId'])) {
    <table border="1" width="100%">
   <tr>
         <th>Name</th>
-        <th>author</th>
-        <th>Year</th>
+        <th>Age</th>
         <th>Genre</th>
-        <th>Age Group</th>
   </tr>
      
 
 <?php
     // output data of each row
-    foreach($books as $book) {
+    foreach($authors as $author) {
       echo "<tr>";
-      echo "<td>" . $book->book_name . "</td>";
-      echo "<td>" . $book->author_name . "</td>";
-      echo "<td>" . $book->book_year . "</td>";
-      echo "<td>" . $book->book_genre . "</td>";
-      echo "<td>" . $book->book_age_group . "</td>";
-      echo "<td><button>Edit</button></td>";
-      echo "<td><button>Delete</button></td>";
+      echo "<td>" . $author->author_name . "</td>";
+      echo "<td>" . $author->author_age . "</td>";
+      echo "<td>" . $author->author_genre . "</td>";
+      echo "<td><a href='editAuthor.php?author_id=" . $author->author_id . "'>Edit</a></td>";
+      echo "<td><a href='deleteAuthor.php?author_id=" . $author->author_id . "'>Delete</a></td>";
       echo "</tr>";
     }
 }

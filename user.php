@@ -1,3 +1,4 @@
+<!-- this is a members page where they get access to books -->
 <?php
 
 session_start();
@@ -22,8 +23,8 @@ if(isset($_SESSION['userId'])) {
 
  $books = $stmt->fetchAll();
 
- if ($_SESSION['userType'] === 'user' ) {
-    $message = "Your role is user";
+ if ($_SESSION['userType'] === 'member' ) {
+    $message = "Your role is Member";
 }
 ?>
 

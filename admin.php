@@ -7,7 +7,7 @@ if(isset($_SESSION['userId'])) {
     if(isset( $_POST['search'])) {
         require('./config/db.php');
         $searchString = "%" . filter_var($_POST["searchText"], FILTER_SANITIZE_STRING ) . "%";
-        $stmt = $pdo -> prepare('SELECT books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id WHERE books.book_name LIKE :ss OR authors.author_name LIKE :ss ORDER BY book_name,author_name, book_genre ');
+        $stmt = $pdo -> prepare('SELECT books.book_id, books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id WHERE books.book_name LIKE :ss OR authors.author_name LIKE :ss ORDER BY book_name,author_name, book_genre ');
         $stmt->bindValue(':ss', $searchString);
         $stmt -> execute();
 
@@ -16,13 +16,13 @@ if(isset($_SESSION['userId'])) {
 
 
 
- $stmt = $pdo -> prepare('SELECT books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id ORDER BY book_name,author_name, book_genre');
+ $stmt = $pdo -> prepare('SELECT books.book_id, books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id ORDER BY book_name,author_name, book_genre');
  $stmt -> execute();
 }
 
  $books = $stmt->fetchAll(); 
 
- if ($_SESSION['userType'] === 'admin' ) {
+ if ($_SESSION['userType'] === 'librarian' ) {
     $message = "Your role is Librarian";
 }
 ?>
@@ -82,8 +82,8 @@ if(isset($_SESSION['userId'])) {
       echo "<td>" . $book->book_year . "</td>";
       echo "<td>" . $book->book_genre . "</td>";
       echo "<td>" . $book->book_age_group . "</td>";
-      echo "<td><button>Edit</button></td>";
-      echo "<td><button>Delete</button></td>";
+      echo "<td><a href='editBook.php?book_id=" . $book->book_id . "'>Edit</a></td>";
+      echo "<td><a href='deleteBook.php?book_id=" . $book->book_id . "'>Delete</a></td>";
       echo "</tr>";
     }
 }

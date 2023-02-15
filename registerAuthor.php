@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 if(isset( $_POST['registerAuthor'])) {
  require('./config/db.php');
 
@@ -13,7 +14,7 @@ $authorGenre = filter_var($_POST["authorGenre"], FILTER_SANITIZE_STRING );
 
         $stmt = $pdo -> prepare('INSERT into authors (author_name, author_age, author_genre) VALUES (?, ?, ?) ');
         $stmt -> execute( [$authorName, $authorAge, $authorGenre] );
-        header('Location: http://localhost/login/admin.php');
+        header('Location: adminAuthors.php');
     
  }
 ?>
