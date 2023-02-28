@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+spl_autoload_register( function($class) {
+  $path = 'classes/';
+  require_once  $path . $class .'.php';
+ });
+
 if (isset($_GET['book_id'])) {
   $bookId=$_GET['book_id'];
 }

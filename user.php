@@ -3,6 +3,11 @@
 
 session_start();
 
+spl_autoload_register( function($class) {
+  $path = 'classes/';
+  require_once  $path . $class .'.php';
+ });
+
 if(isset($_SESSION['userId'])) {
     $userId = $_SESSION['userId'];
     if(isset( $_POST['search'])) {

@@ -3,6 +3,11 @@
 if (isset($_POST['register'])) {
   require('./config/db.php');
 
+spl_autoload_register( function($class) {
+  $path = 'classes/';
+  require_once  $path . $class .'.php';
+ });
+
   //  $userName = $_POST["userName"];
 //  $userEmail = $_POST["userEmail"];
 //  $password = $_POST["password"];

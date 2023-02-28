@@ -2,6 +2,11 @@
 
 session_start();
 
+spl_autoload_register( function($class) {
+  $path = 'classes/';
+  require_once  $path . $class .'.php';
+ });
+
 if(isset($_SESSION['userId'])) {
  require('./config/db.php');
 

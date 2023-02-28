@@ -5,6 +5,11 @@ if (isset($_GET['author_id'])) {
   $authorId=$_GET['author_id'];
 }
 
+spl_autoload_register( function($class) {
+  $path = 'classes/';
+  require_once  $path . $class .'.php';
+ });
+
 if(isset($_SESSION['userType']) && $_SESSION['userType'] == 'librarian') {
   require('./config/db.php');
   $getstmt = $pdo -> prepare('SELECT author_name, author_age, author_genre FROM authors WHERE author_id = ?');

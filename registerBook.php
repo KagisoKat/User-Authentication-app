@@ -1,24 +1,34 @@
 <!-- for librarian to register books -->
 <?php
 session_start();
-if (isset($_POST['registerBook'])) {
 
-    require('./config/db.php');
-    //  $userName = $_POST["userName"];
-//  $userEmail = $_POST["userEmail"];
-//  $password = $_POST["password"];
-    $bookName = filter_var($_POST["bookName"], FILTER_SANITIZE_STRING);
-    $bookYear = filter_var($_POST["bookYear"], FILTER_SANITIZE_EMAIL);
-    $bookGenre = filter_var($_POST["bookGenre"], FILTER_SANITIZE_STRING);
-    $bookAgeGroup = filter_var($_POST["bookAgeGroup"], FILTER_SANITIZE_STRING);
-    $authorId = filter_var($_POST["authorId"], FILTER_SANITIZE_STRING);
+spl_autoload_register( function($class) {
+  $path = 'classes/';
+  require_once  $path . $class .'.php';
+ });
+
+if(isset($_SESSION['userType']) && $_SESSION['userType'] == 'librarian') {
+    if (isset($_POST['registerBook'])) {
+
+        require('./config/db.php');
+        //  $userName = $_POST["userName"];
+    //  $userEmail = $_POST["userEmail"];
+    //  $password = $_POST["password"];
+        $bookName = filter_var($_POST["bookName"], FILTER_SANITIZE_STRING);
+        $bookYear = filter_var($_POST["bookYear"], FILTER_SANITIZE_EMAIL);
+        $bookGenre = filter_var($_POST["bookGenre"], FILTER_SANITIZE_STRING);
+        $bookAgeGroup = filter_var($_POST["bookAgeGroup"], FILTER_SANITIZE_STRING);
+        $authorId = filter_var($_POST["authorId"], FILTER_SANITIZE_STRING);
 
 
 
-    $stmt = $pdo->prepare('INSERT into books (book_name, book_year, book_genre, book_age_group, author_id) VALUES (?, ?, ?, ?,?) ');
-    $stmt->execute([$bookName, $bookYear, $bookGenre, $bookAgeGroup, $authorId]);
-    header('Location: http://localhost/login/admin.php');
+        $stmt = $pdo->prepare('INSERT into books (book_name, book_year, book_genre, book_age_group, author_id) VALUES (?, ?, ?, ?,?) ');
+        $stmt->execute([$bookName, $bookYear, $bookGenre, $bookAgeGroup, $authorId]);
+        header('Location: http://localhost/login/admin.php');
 
+    }
+} else {
+    echo "Unauthorized!";
 }
 ?>
 

@@ -4,6 +4,13 @@
 
 session_start();
 
+spl_autoload_register( function($class) {
+  $path = 'classes/';
+  require_once  $path . $class .'.php';
+ });
+
+ $book1 = new Book();
+
 if (isset($_SESSION['userId'])) {
     $userId = $_SESSION['userId'];
     if (isset($_POST['search'])) {

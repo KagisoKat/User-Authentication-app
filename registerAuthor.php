@@ -1,8 +1,14 @@
 <?php
 session_start();
 
-if(isset( $_POST['registerAuthor'])) {
+if(isset($_SESSION['userType']) && $_SESSION['userType'] == 'librarian') {
+  if(isset( $_POST['registerAuthor'])) {
  require('./config/db.php');
+
+spl_autoload_register( function($class) {
+  $path = 'classes/';
+  require_once  $path . $class .'.php';
+ });
 
 //  $userName = $_POST["userName"];
 //  $userEmail = $_POST["userEmail"];
@@ -17,6 +23,9 @@ $authorGenre = filter_var($_POST["authorGenre"], FILTER_SANITIZE_STRING );
         header('Location: adminAuthors.php');
     
  }
+} else {
+    echo "Unauthorized!";
+}
 ?>
 
  <?php require('./inc/header.html'); ?>
