@@ -4,7 +4,6 @@ if (isset($_POST['register'])) {
   require('./config/db.php');
 
 spl_autoload_register( function($class) {
-  echo "$class";
   $classSplit=explode('\\', $class);
   $path = 'classes/';
   require_once  $path . $classSplit[0] . '/' . $classSplit[1] .'.php';
@@ -17,14 +16,14 @@ spl_autoload_register( function($class) {
   $user = new Library\User();
   $user->setName(filter_var($_POST["userName"], FILTER_SANITIZE_STRING));
   $user->setEmail(filter_var($_POST["userEmail"], FILTER_SANITIZE_EMAIL));
-  $user->setPasswordHashed(filter_var($_POST["password"], FILTER_SANITIZE_STRING));
+  $user->setPassword(filter_var($_POST["password"], FILTER_SANITIZE_STRING));
   $user->setRole(filter_var($_POST["userType"], FILTER_SANITIZE_STRING));
 
-  $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
+  $user->setPasswordHashed(password_hash($user->getPassword(), PASSWORD_DEFAULT));
 
   if (filter_var($user->getEmail(), FILTER_SANITIZE_STRING)) {
     $stmt = $pdo->prepare('SELECT * from users WHERE email = ? ');
-    $stmt->execute([$userEmail]);
+    $stmt->execute([$user->getEmail()]);
     $totalUsers = $stmt->rowCount();
 
     // echo $totalUsers . '<br>';
