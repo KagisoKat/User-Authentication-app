@@ -2,9 +2,12 @@
   session_start();
   
 spl_autoload_register( function($class) {
+  echo "$class";
+  $classSplit=explode('\\', $class);
   $path = 'classes/';
-  require_once  $path . $class .'.php';
+  require_once  $path . $classSplit[0] . '/' . $classSplit[1] .'.php';
  });
+
 
     if(isset($_SESSION['userId'])) {
         $userId=$_SESSION['userId'];
