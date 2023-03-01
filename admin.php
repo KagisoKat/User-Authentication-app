@@ -4,6 +4,17 @@
 
 session_start();
 
+$sortMethod="name";
+if (isset($_GET['sorting'])) {
+    if ($_GET['sorting'] == 'name') {
+        $sortMethod="name";
+    } elseif ($_GET['sorting'] == 'author') {
+        $sortMethod="author";
+    } elseif ($_GET['sorting'] == 'genre') {
+        $sortMethod="genre";
+    }
+}
+
 spl_autoload_register( function($class) {
   $path = 'classes/';
   require_once  $path . $class .'.php';
@@ -16,16 +27,26 @@ if (isset($_SESSION['userId'])) {
     if (isset($_POST['search'])) {
         require('./config/db.php');
         $searchString = "%" . filter_var($_POST["searchText"], FILTER_SANITIZE_STRING) . "%";
-        $stmt = $pdo->prepare('SELECT books.book_id, books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id WHERE books.book_name LIKE :ss OR authors.author_name LIKE :ss ORDER BY book_name,author_name, book_genre ');
+        if ($sortMethod == 'name') {
+            $stmt = $pdo->prepare('SELECT books.book_id, books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id WHERE books.book_name LIKE :ss OR authors.author_name LIKE :ss ORDER BY book_name');
+        } elseif ($sortMethod == 'author') {
+            $stmt = $pdo->prepare('SELECT books.book_id, books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id WHERE books.book_name LIKE :ss OR authors.author_name LIKE :ss ORDER BY author_name');
+        } elseif ($sortMethod == 'genre') {
+            $stmt = $pdo->prepare('SELECT books.book_id, books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id WHERE books.book_name LIKE :ss OR authors.author_name LIKE :ss ORDER BY book_genre ');
+        }
         $stmt->bindValue(':ss', $searchString);
         $stmt->execute();
 
     } else {
         require('./config/db.php');
 
-
-
-        $stmt = $pdo->prepare('SELECT books.book_id, books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id ORDER BY book_name,author_name, book_genre');
+        if ($sortMethod == 'name') {
+        $stmt = $pdo->prepare('SELECT books.book_id, books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id ORDER BY book_name');
+        } elseif ($sortMethod == 'author') {
+        $stmt = $pdo->prepare('SELECT books.book_id, books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id ORDER BY author_name');
+        } elseif ($sortMethod == 'genre') {
+        $stmt = $pdo->prepare('SELECT books.book_id, books.book_name, authors.author_name ,books.book_year, books.book_genre, books.book_age_group FROM books INNER JOIN authors ON books.author_id=authors.author_id ORDER BY book_genre');
+        }
         $stmt->execute();
     }
 
@@ -74,8 +95,14 @@ if (isset($_SESSION['userId'])) {
 
             </div>
 
-
             <div>
+                Sorting:
+                <a href="admin.php?sorting=name">Name</a>
+                <a href="admin.php?sorting=author">Author</a>
+                <a href="admin.php?sorting=genre">Genre</a>
+            </div>
+            <div>
+
                 <table border="1" width="100%">
                     <tr>
                         <th>Name</th>
@@ -88,15 +115,22 @@ if (isset($_SESSION['userId'])) {
 
                     <?php
                     // output data of each row
-                    foreach ($books as $book) {
+                    foreach ($books as $book_item) {
+                        $book = new Book();
+                        $book->setId($book_item->book_id);
+                        $book->setName($book_item->book_name);
+                        $book->setYear($book_item->book_year);
+                        $book->setGenre($book_item->book_genre);
+                        $book->setAgeGroup($book_item->book_age_group);
+                        $book->setAuthorName($book_item->author_name);
                         echo "<tr>";
-                        echo "<td>" . $book->book_name . "</td>";
-                        echo "<td>" . $book->author_name . "</td>";
-                        echo "<td>" . $book->book_year . "</td>";
-                        echo "<td>" . $book->book_genre . "</td>";
-                        echo "<td>" . $book->book_age_group . "</td>";
-                        echo "<td><a href='editBook.php?book_id=" . $book->book_id . "'>Edit</a></td>";
-                        echo "<td><a href='deleteBook.php?book_id=" . $book->book_id . "'>Delete</a></td>";
+                        echo "<td>" . $book->getName() . "</td>";
+                        echo "<td>" . $book->getAuthorName() . "</td>";
+                        echo "<td>" . $book->getYear() . "</td>";
+                        echo "<td>" . $book->getGenre() . "</td>";
+                        echo "<td>" . $book->getAgeGroup() . "</td>";
+                        echo "<td><a href='editBook.php?book_id=" . $book->getId() . "'>Edit</a></td>";
+                        echo "<td><a href='deleteBook.php?book_id=" . $book->getId() . "'>Delete</a></td>";
                         echo "</tr>";
                     }
 }

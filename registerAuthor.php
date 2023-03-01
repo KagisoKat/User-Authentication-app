@@ -13,13 +13,14 @@ spl_autoload_register( function($class) {
 //  $userName = $_POST["userName"];
 //  $userEmail = $_POST["userEmail"];
 //  $password = $_POST["password"];
-$authorName = filter_var($_POST["authorName"], FILTER_SANITIZE_STRING );
-$authorAge = filter_var($_POST["authorAge"], FILTER_SANITIZE_EMAIL );
-$authorGenre = filter_var($_POST["authorGenre"], FILTER_SANITIZE_STRING );
+$author = new Author();
+$author->setName(filter_var($_POST["authorName"], FILTER_SANITIZE_STRING ));
+$author->setAge(filter_var($_POST["authorAge"], FILTER_SANITIZE_EMAIL ));
+$author->setGenre(filter_var($_POST["authorGenre"], FILTER_SANITIZE_STRING ));
 
 
         $stmt = $pdo -> prepare('INSERT into authors (author_name, author_age, author_genre) VALUES (?, ?, ?) ');
-        $stmt -> execute( [$authorName, $authorAge, $authorGenre] );
+        $stmt -> execute( [$author->getName(), $author->getAge(), $author->getGenre()] );
         header('Location: adminAuthors.php');
     
  }

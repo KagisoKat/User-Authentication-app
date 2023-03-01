@@ -11,14 +11,15 @@ spl_autoload_register( function($class) {
   //  $userName = $_POST["userName"];
 //  $userEmail = $_POST["userEmail"];
 //  $password = $_POST["password"];
-  $userName = filter_var($_POST["userName"], FILTER_SANITIZE_STRING);
-  $userEmail = filter_var($_POST["userEmail"], FILTER_SANITIZE_EMAIL);
-  $password = filter_var($_POST["password"], FILTER_SANITIZE_STRING);
-  $userType = filter_var($_POST["userType"], FILTER_SANITIZE_STRING);
+  $user = new User();
+  $user->setName(filter_var($_POST["userName"], FILTER_SANITIZE_STRING));
+  $user->setEmail(filter_var($_POST["userEmail"], FILTER_SANITIZE_EMAIL));
+  $user->setPasswordHashed(filter_var($_POST["password"], FILTER_SANITIZE_STRING));
+  $user->setRole(filter_var($_POST["userType"], FILTER_SANITIZE_STRING));
 
   $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
 
-  if (filter_var($userEmail, FILTER_SANITIZE_STRING)) {
+  if (filter_var($user->getEmail(), FILTER_SANITIZE_STRING)) {
     $stmt = $pdo->prepare('SELECT * from users WHERE email = ? ');
     $stmt->execute([$userEmail]);
     $totalUsers = $stmt->rowCount();
@@ -30,7 +31,7 @@ spl_autoload_register( function($class) {
       $emailTaken = "Email already been taken";
     } else {
       $stmt = $pdo->prepare('INSERT into users (name, email, password, role) VALUES (?, ?, ?, ?) ');
-      $stmt->execute([$userName, $userEmail, $passwordHashed, $userType]);
+      $stmt->execute([$user->getName(), $user->getEmail(), $user->getPasswordHashed(), $user->getRole()]);
       header('Location: http://localhost/login/index.php');
     }
   }

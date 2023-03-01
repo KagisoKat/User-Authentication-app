@@ -15,9 +15,15 @@ if(isset($_SESSION['userId'])) {
  $stmt = $pdo -> prepare('SELECT * FROM users WHERE id = ? ');
  $stmt -> execute( [ $userId ]);
 
- $user = $stmt ->fetch(); 
+ $user_item = $stmt ->fetch(); 
 
- if ($user->role === 'guest' ) {
+ $user = new User();
+ $user->setId($user_item->id);
+ $user->setName($user_item->name);
+ $user->setEmail($user_item->email);
+ $user->setRole($user_item->role);
+
+ if ($user->getRole() === 'guest' ) {
     $message = "Your role is guest";
 }
 
@@ -34,7 +40,7 @@ if(isset($_SESSION['userId'])) {
   <div class= "card bg-light mb-3">
    <div class="card-header">
     <?php  if (isset($user)) { ?>
-        <h5>Welcome <?php echo $user->name ?></h5>
+        <h5>Welcome <?php echo $user->getname() ?></h5>
         <?php } else { ?> 
     <h5>Welcome Guest</h5>
     <?php } ?>

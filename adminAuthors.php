@@ -84,13 +84,18 @@ if (isset($_SESSION['userId'])) {
 
                <?php
                // output data of each row
-               foreach ($authors as $author) {
+               foreach ($authors as $author_item) {
+                  $author = new Author();
+                  $author->setName($author_item->author_name);
+                  $author->setAge($author_item->author_age);
+                  $author->setGenre($author_item->author_genre);
+                  $author->setId($author_item->author_id);
                   echo "<tr>";
-                  echo "<td>" . $author->author_name . "</td>";
-                  echo "<td>" . $author->author_age . "</td>";
-                  echo "<td>" . $author->author_genre . "</td>";
-                  echo "<td><a href='editAuthor.php?author_id=" . $author->author_id . "'>Edit</a></td>";
-                  echo "<td><a href='deleteAuthor.php?author_id=" . $author->author_id . "'>Delete</a></td>";
+                  echo "<td>" . $author->getName() . "</td>";
+                  echo "<td>" . $author->getAge() . "</td>";
+                  echo "<td>" . $author->getGenre() . "</td>";
+                  echo "<td><a href='editAuthor.php?author_id=" . $author->getId() . "'>Edit</a></td>";
+                  echo "<td><a href='deleteAuthor.php?author_id=" . $author->getId() . "'>Delete</a></td>";
                   echo "</tr>";
                }
 }

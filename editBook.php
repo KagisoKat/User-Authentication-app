@@ -14,7 +14,13 @@ if(isset($_SESSION['userType']) && $_SESSION['userType'] == 'librarian') {
   require('./config/db.php');
   $getstmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group, author_id FROM books WHERE book_id = ?');
   $getstmt -> execute( [$bookId] );
-  $currentBook = $getstmt->fetch();
+  $currentBookItem = $getstmt->fetch();
+  $currentBook = new Book();
+  $currentBook->setName($currentBookItem->book_name);
+  $currentBook->setYear($currentBookItem->book_year);
+  $currentBook->setGenre($currentBookItem->book_genre);
+  $currentBook->setAgeGroup($currentBookItem->book_age_group);
+  $currentBook->setAuthorId($currentBookItem->author_id);
 } else {
   echo "Unauthorized!";
 }
@@ -22,14 +28,16 @@ if(isset($_SESSION['userType']) && $_SESSION['userType'] == 'librarian') {
 if(isset( $_POST['updateBook'])) {
   require('./config/db.php');
   
-  $bookName = filter_var($_POST["bookName"], FILTER_SANITIZE_STRING );
-  $bookYear = filter_var($_POST["bookYear"], FILTER_SANITIZE_EMAIL );
-  $bookGenre = filter_var($_POST["bookGenre"], FILTER_SANITIZE_STRING );
-  $bookAgeGroup = filter_var($_POST["bookAgeGroup"], FILTER_SANITIZE_STRING );
-  $authorId = filter_var($_POST["authorId"], FILTER_SANITIZE_STRING );
+  $book = new Book();
+  $book->setId($bookId);
+  $book->setName(filter_var($_POST["bookName"], FILTER_SANITIZE_STRING ));
+  $book->setYear(filter_var($_POST["bookYear"], FILTER_SANITIZE_EMAIL ));
+  $book->setGenre(filter_var($_POST["bookGenre"], FILTER_SANITIZE_STRING ));
+  $book->setAgeGroup(filter_var($_POST["bookAgeGroup"], FILTER_SANITIZE_STRING ));
+  $book->setAuthorId(filter_var($_POST["authorId"], FILTER_SANITIZE_STRING ));
 
   $stmt = $pdo -> prepare('UPDATE books SET book_name = ?, book_year = ?, book_genre = ?, book_age_group = ?, author_id = ? WHERE book_id= ?');
-  $stmt -> execute( [$bookName, $bookYear, $bookGenre, $bookAgeGroup,$authorId, $bookId] );
+  $stmt -> execute( [$book->getName(), $book->getYear(), $book->getGenre(), $book->getAgeGroup(),$book->getAuthorId(), $bookId] );
   header('Location: admin.php');
 }
 ?>
@@ -44,23 +52,23 @@ if(isset( $_POST['updateBook'])) {
         <form action="editBook.php?book_id=<?php echo $bookId ?>" method="POST">
           <div class="form-group">
            <label for="bookName">Book Name</label>
-            <input required type="text" name="bookName" class="form-control" value="<?php echo $currentBook->book_name ?>"/>
+            <input required type="text" name="bookName" class="form-control" value="<?php echo $currentBook->getName() ?>"/>
          </div>
          <div class="form-group">
            <label for="bookYear">Book Year</label>
-            <input required type="text" name="bookYear" class="form-control" value="<?php echo $currentBook->book_year ?>"/>
+            <input required type="text" name="bookYear" class="form-control" value="<?php echo $currentBook->getYear() ?>"/>
             <br />
 
          </div>
          <div class="form-group">
            <label for="bookGenre">Book Genre</label>
-            <input required type="text" name="bookGenre" class="form-control" value="<?php echo $currentBook->book_genre ?>"/>
+            <input required type="text" name="bookGenre" class="form-control" value="<?php echo $currentBook->getGenre() ?>"/>
             <br />
 
          </div>
          <div class="form-group">
            <label for="bookAgeGroup">Book Age Group</label>
-            <input required type="text" name="bookAgeGroup" class="form-control" value="<?php echo $currentBook->book_age_group ?>"/>
+            <input required type="text" name="bookAgeGroup" class="form-control" value="<?php echo $currentBook->getAgeGroup() ?>"/>
             <br />
 
          </div>
@@ -71,10 +79,13 @@ if(isset( $_POST['updateBook'])) {
                  $stmt2 = $pdo -> prepare('SELECT author_id, author_name FROM authors');
                  $stmt2 -> execute();
                  $authors = $stmt2->fetchAll(); 
-                 foreach($authors as $author) {
-                 echo '<option value="' . $author->author_id . '"';
-                 if ($author->author_id == $currentBook->author_id) echo " selected='selected'";
-                 echo '">' . $author->author_name . '</option>';
+                 foreach($authors as $author_item) {
+                   $author = new Author();
+                   $author->setId($author_item->author_id);
+                   $author->setName($author_item->author_name);
+                   echo '<option value="' . $author_item->author_id . '"';
+                   if ($author->getId() == $currentBook->getAuthorId()) echo " selected='selected'";
+                   echo '">' . $author->getName() . '</option>';
                  }
          ?>
       </select>

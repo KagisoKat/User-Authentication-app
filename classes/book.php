@@ -6,6 +6,7 @@
         private $genre;
         private $ageGroup;
         private $authorId;
+        private $authorName;
 
         function getId() {
             return $this->id;
@@ -31,6 +32,10 @@
             return $this->authorId;
         }
 
+        function getAuthorName() {
+            return $this->authorName;
+        }
+
         function setId($id) {
             $this->id = $id;
         }
@@ -53,6 +58,10 @@
 
         function setAuthorId($authorId) {
             $this->authorId = $authorId;
+        }
+
+        function setAuthorName($authorName) {
+            $this->authorName = $authorName;
         }
     }
 ?>

@@ -14,7 +14,13 @@ if  (isset($_SESSION['userId'])) {
     $stmt = $pdo ->prepare('SELECT * from users WHERE id = ?');
     $stmt->execute([$userId]);
 
-    $user = $stmt -> fetch();
+    $user_item = $stmt -> fetch();
+    $user = new User();
+    $user->setId($user_item->id);
+    $user->setName($user_item->name);
+    $user->setEmail($user_item->email);
+    $user->setPassword($user_item->password);
+    $user->setRole($user_item->role);
 }
 if(isset( $_POST['profile'])) {
  
@@ -22,28 +28,33 @@ if(isset( $_POST['profile'])) {
 //  $userName = $_POST["userName"];
 //  $userEmail = $_POST["userEmail"];
 //  $password = $_POST["password"];
-$userName = filter_var($_POST["userName"], FILTER_SANITIZE_STRING );
-$userEmail = filter_var($_POST["userEmail"], FILTER_SANITIZE_EMAIL );
-$password = filter_var($_POST["password"], FILTER_SANITIZE_STRING );
-$passwordHashed = password_hash($password, PASSWORD_DEFAULT);
+$user = new User();
+$user->setId($_SESSION['userId']);
+$user->setName(filter_var($_POST["userName"], FILTER_SANITIZE_STRING ));
+$user->setEmail(filter_var($_POST["userEmail"], FILTER_SANITIZE_EMAIL ));
+$user->setPassword(filter_var($_POST["password"], FILTER_SANITIZE_STRING ));
+$user->setPasswordHashed(password_hash($password, PASSWORD_DEFAULT));
 
- if( filter_var($userEmail, FILTER_SANITIZE_STRING) ) {
-    $stmt = $pdo -> prepare('SELECT * from users WHERE email = ? ');
-    $stmt -> execute( [$userEmail] );
-    $totalUsers = $stmt -> rowCount();
+$stmt = $pdo -> prepare('UPDATE users SET name = ?, email = ? password = ? WHERE id = ?');
+$stmt -> execute( [$user->getPassword(), $user->getEmail(), $user->getPasswordHashed(), $user->getId()] );
+}
+  //if( filter_var($userEmail, FILTER_SANITIZE_STRING) ) {
+  //  $stmt = $pdo -> prepare('SELECT * from users WHERE email = ? ');
+  //  $stmt -> execute( [$userEmail] );
+  //  $totalUsers = $stmt -> rowCount();
 
     // echo $totalUsers . '<br>';
 
-    if( $totalUsers > 0 ) {
-        // echo "Email already in use <br>";
-        $emailTaken = "Email already been taken";
-    } else {
-        $stmt = $pdo -> prepare('INSERT into users (name, email, password) VALUES(? , ?, ? ) ');
-        $stmt -> execute( [$userName, $userEmail, $passwordHashed] );
-        header('Location: http://localhost/login/index.php');
-    }
- }
-}
+    //if( $totalUsers > 0 ) {
+    //    // echo "Email already in use <br>";
+    //    $emailTaken = "Email already been taken";
+    //} else {
+    //    $stmt = $pdo -> prepare('INSERT into users (name, email, password) VALUES(? , ?, ? ) ');
+    //    $stmt -> execute( [$userName, $userEmail, $passwordHashed] );
+    //    header('Location: http://localhost/login/index.php');
+    //}
+ //}
+
 ?>
 
  <?php require('./inc/header.html'); ?>
@@ -56,11 +67,11 @@ $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
         <form action="profile.php" method="POST">
           <div class="form-group">
            <label for="userName">User Name</label>
-            <input required type="text" name="userName" class="form-control"  value="<?php echo $user->name ?>" />
+            <input required type="text" name="userName" class="form-control"  value="<?php echo $user->getName() ?>" />
          </div>
          <div class="form-group">
            <label for="userEmail">User Email</label>
-            <input required type="email" name="userEmail" class="form-control" value="<?php echo $user->email ?>" />
+            <input required type="email" name="userEmail" class="form-control" value="<?php echo $user->getEmail() ?>" />
             <br />
             <?php if(isset($emailTaken)) { ?>
              <p><?php echo $emailTaken ?><p>
