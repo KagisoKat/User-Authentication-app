@@ -24,9 +24,9 @@ if(isset($_SESSION['userId'])) {
         $searchString = "%" . filter_var($_POST["searchText"], FILTER_SANITIZE_STRING ) . "%";
 
         if ($sortMethod == 'name') {
-            $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group FROM books WHERE book_name LIKE :ss ORDER BY book_name');
+            $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group, loan_user_id FROM books WHERE book_name LIKE :ss ORDER BY book_name');
         } elseif  ($sortMethod == 'genre') {
-            $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group FROM books WHERE book_name LIKE :ss ORDER BY book_genre ');
+            $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group, loan_user_id FROM books WHERE book_name LIKE :ss ORDER BY book_genre ');
         }
 
         $stmt->bindValue(':ss', $searchString);
@@ -38,9 +38,9 @@ if(isset($_SESSION['userId'])) {
 
 
  if ($sortMethod == 'name') {
-    $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group FROM books  ORDER BY book_name');
+    $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group, loan_user_id FROM books  ORDER BY book_name');
  } elseif  ($sortMethod == 'genre') {
-    $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group FROM books  ORDER BY book_genre');
+    $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group, loan_user_id FROM books  ORDER BY book_genre');
  }
  $stmt -> execute();
 
