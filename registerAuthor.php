@@ -13,7 +13,7 @@ spl_autoload_register( function($class) {
 //  $userName = $_POST["userName"];
 //  $userEmail = $_POST["userEmail"];
 //  $password = $_POST["password"];
-$author = new Author();
+$author = new Library\Author();
 $author->setName(filter_var($_POST["authorName"], FILTER_SANITIZE_STRING ));
 $author->setAge(filter_var($_POST["authorAge"], FILTER_SANITIZE_EMAIL ));
 $author->setGenre(filter_var($_POST["authorGenre"], FILTER_SANITIZE_STRING ));

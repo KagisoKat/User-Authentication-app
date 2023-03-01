@@ -21,7 +21,7 @@ if (isset($_POST['login'])) {
   $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
   $stmt->execute([$userEmail]);
   $user_item = $stmt->FETCH();
-  $user = new User();
+  $user = new Library\User();
  if (isset($user_item)) {
   $user->setId($user_item->id);
   $user->setName($user_item->name);

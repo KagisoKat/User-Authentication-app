@@ -15,7 +15,7 @@ if(isset($_SESSION['userType']) && $_SESSION['userType'] == 'librarian') {
   $getstmt = $pdo -> prepare('SELECT author_name, author_age, author_genre FROM authors WHERE author_id = ?');
   $getstmt -> execute( [$authorId] );
   $currentAuthorItem = $getstmt->fetch();
-  $currentAuthor = new Author();
+  $currentAuthor = new Library\Author();
   $currentAuthor->setName($currentAuthorItem->author_name);
   $currentAuthor->setAge($currentAuthorItem->author_age);
   $currentAuthor->setGenre($currentAuthorItem->author_genre);
@@ -27,7 +27,7 @@ if(isset( $_POST['updateAuthor'])) {
  require('./config/db.php');
 
 
-$author = new Author();
+$author = new Library\Author();
 $author->setId($authorId);
 $author->setName(filter_var($_POST["authorName"], FILTER_SANITIZE_STRING ));
 $author->setAge(filter_var($_POST["authorAge"], FILTER_SANITIZE_EMAIL ));

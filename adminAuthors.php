@@ -85,7 +85,7 @@ if (isset($_SESSION['userId'])) {
                <?php
                // output data of each row
                foreach ($authors as $author_item) {
-                  $author = new Author();
+                  $author = new Library\Author();
                   $author->setName($author_item->author_name);
                   $author->setAge($author_item->author_age);
                   $author->setGenre($author_item->author_genre);

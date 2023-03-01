@@ -11,7 +11,7 @@ spl_autoload_register( function($class) {
   //  $userName = $_POST["userName"];
 //  $userEmail = $_POST["userEmail"];
 //  $password = $_POST["password"];
-  $user = new User();
+  $user = new Library\User();
   $user->setName(filter_var($_POST["userName"], FILTER_SANITIZE_STRING));
   $user->setEmail(filter_var($_POST["userEmail"], FILTER_SANITIZE_EMAIL));
   $user->setPasswordHashed(filter_var($_POST["password"], FILTER_SANITIZE_STRING));

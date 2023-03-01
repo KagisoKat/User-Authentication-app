@@ -1,4 +1,5 @@
 <?php
+    namespace Library;
     class Book{
         private $id;
         private $name;

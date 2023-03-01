@@ -108,7 +108,7 @@ if(isset($_SESSION['userId'])) {
 <?php
     // output data of each row
     foreach($books as $book_item) {
-      $book = new Book();
+      $book = new Library\Book();
       $book->setId($book_item->book_id);
       $book->setName($book_item->book_name);
       $book->setYear($book_item->book_year);

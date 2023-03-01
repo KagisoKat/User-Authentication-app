@@ -1,4 +1,5 @@
 <?php
+    namespace Library;
     class Author {
         private $id;
         private $name;

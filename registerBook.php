@@ -14,7 +14,7 @@ if(isset($_SESSION['userType']) && $_SESSION['userType'] == 'librarian') {
         //  $userName = $_POST["userName"];
     //  $userEmail = $_POST["userEmail"];
     //  $password = $_POST["password"];
-        $book = new Book();
+        $book = new Library\Book();
         $book->setName(filter_var($_POST["bookName"], FILTER_SANITIZE_STRING));
         $book->setYear(filter_var($_POST["bookYear"], FILTER_SANITIZE_EMAIL));
         $book->setGenre(filter_var($_POST["bookGenre"], FILTER_SANITIZE_STRING));

@@ -17,7 +17,7 @@ if(isset($_SESSION['userId'])) {
 
  $user_item = $stmt ->fetch(); 
 
- $user = new User();
+ $user = new Library\User();
  $user->setId($user_item->id);
  $user->setName($user_item->name);
  $user->setEmail($user_item->email);

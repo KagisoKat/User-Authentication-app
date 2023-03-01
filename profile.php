@@ -15,7 +15,7 @@ if  (isset($_SESSION['userId'])) {
     $stmt->execute([$userId]);
 
     $user_item = $stmt -> fetch();
-    $user = new User();
+    $user = new Library\User();
     $user->setId($user_item->id);
     $user->setName($user_item->name);
     $user->setEmail($user_item->email);
@@ -28,7 +28,7 @@ if(isset( $_POST['profile'])) {
 //  $userName = $_POST["userName"];
 //  $userEmail = $_POST["userEmail"];
 //  $password = $_POST["password"];
-$user = new User();
+$user = new Library\User();
 $user->setId($_SESSION['userId']);
 $user->setName(filter_var($_POST["userName"], FILTER_SANITIZE_STRING ));
 $user->setEmail(filter_var($_POST["userEmail"], FILTER_SANITIZE_EMAIL ));

@@ -15,7 +15,7 @@ if(isset($_SESSION['userType']) && $_SESSION['userType'] == 'librarian') {
   $getstmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group, author_id FROM books WHERE book_id = ?');
   $getstmt -> execute( [$bookId] );
   $currentBookItem = $getstmt->fetch();
-  $currentBook = new Book();
+  $currentBook = new Library\Book();
   $currentBook->setName($currentBookItem->book_name);
   $currentBook->setYear($currentBookItem->book_year);
   $currentBook->setGenre($currentBookItem->book_genre);
@@ -28,7 +28,7 @@ if(isset($_SESSION['userType']) && $_SESSION['userType'] == 'librarian') {
 if(isset( $_POST['updateBook'])) {
   require('./config/db.php');
   
-  $book = new Book();
+  $book = new Library\Book();
   $book->setId($bookId);
   $book->setName(filter_var($_POST["bookName"], FILTER_SANITIZE_STRING ));
   $book->setYear(filter_var($_POST["bookYear"], FILTER_SANITIZE_EMAIL ));
@@ -80,7 +80,7 @@ if(isset( $_POST['updateBook'])) {
                  $stmt2 -> execute();
                  $authors = $stmt2->fetchAll(); 
                  foreach($authors as $author_item) {
-                   $author = new Author();
+                   $author = new Library\Author();
                    $author->setId($author_item->author_id);
                    $author->setName($author_item->author_name);
                    echo '<option value="' . $author_item->author_id . '"';
