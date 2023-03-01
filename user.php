@@ -24,9 +24,9 @@ if(isset($_SESSION['userId'])) {
         $searchString = "%" . filter_var($_POST["searchText"], FILTER_SANITIZE_STRING ) . "%";
 
         if ($sortMethod == 'name') {
-            $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group, loan_user_id FROM books WHERE book_name LIKE :ss ORDER BY book_name');
+            $stmt = $pdo -> prepare('SELECT book_id, book_name, book_year, book_genre, book_age_group, loan_user_id FROM books WHERE book_name LIKE :ss ORDER BY book_name');
         } elseif  ($sortMethod == 'genre') {
-            $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group, loan_user_id FROM books WHERE book_name LIKE :ss ORDER BY book_genre ');
+            $stmt = $pdo -> prepare('SELECT book_id, book_name, book_year, book_genre, book_age_group, loan_user_id FROM books WHERE book_name LIKE :ss ORDER BY book_genre ');
         }
 
         $stmt->bindValue(':ss', $searchString);
@@ -38,9 +38,9 @@ if(isset($_SESSION['userId'])) {
 
 
  if ($sortMethod == 'name') {
-    $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group, loan_user_id FROM books  ORDER BY book_name');
+    $stmt = $pdo -> prepare('SELECT book_id, book_name, book_year, book_genre, book_age_group, loan_user_id FROM books  ORDER BY book_name');
  } elseif  ($sortMethod == 'genre') {
-    $stmt = $pdo -> prepare('SELECT book_name, book_year, book_genre, book_age_group, loan_user_id FROM books  ORDER BY book_genre');
+    $stmt = $pdo -> prepare('SELECT book_id, book_name, book_year, book_genre, book_age_group, loan_user_id FROM books  ORDER BY book_genre');
  }
  $stmt -> execute();
 
@@ -100,6 +100,8 @@ if(isset($_SESSION['userId'])) {
         <th>Year</th>
         <th>Genre</th>
         <th>Age Group</th>
+        <th>Loan</th>
+        <th>Return</th>
     </tr>
 
 
@@ -107,15 +109,24 @@ if(isset($_SESSION['userId'])) {
     // output data of each row
     foreach($books as $book_item) {
       $book = new Book();
+      $book->setId($book_item->book_id);
       $book->setName($book_item->book_name);
       $book->setYear($book_item->book_year);
       $book->setGenre($book_item->book_genre);
       $book->setAgeGroup($book_item->book_age_group);
+      $book->setLoanUserId($book_item->loan_user_id);
       echo "<tr>";
       echo "<td>" . $book->getName() . "</td>";
       echo "<td>" . $book->getYear() . "</td>";
       echo "<td>" . $book->getGenre() . "</td>";
       echo "<td>" . $book->getAgeGroup() . "</td>";
+      if ($book->getLoanUserId() == -1) echo '<td><a href="loanBook.php?book_id=' . $book->getId() . '">Loan</a></td>'; else echo "<td></td>";
+      if ($book->getLoanUserId() == $userId)
+        echo '<td><a href="returnBook.php?book_id=' . $book->getId() . '">Return</a></td>';
+      elseif  ($book->getLoanUserId() == -1)
+        echo "<td></td>";
+      elseif ($book->getLoanUserId() != $userId)
+        echo "<td>Out</td>";
       echo "</tr>";
     }
 }

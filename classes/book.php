@@ -7,6 +7,7 @@
         private $ageGroup;
         private $authorId;
         private $authorName;
+        private $loanUserId;
 
         function getId() {
             return $this->id;
@@ -36,6 +37,10 @@
             return $this->authorName;
         }
 
+        function getLoanUserId() {
+            return $this->loanUserId;
+        }
+
         function setId($id) {
             $this->id = $id;
         }
@@ -62,6 +67,10 @@
 
         function setAuthorName($authorName) {
             $this->authorName = $authorName;
+        }
+
+        function setLoanUserId($loanUserId) {
+            $this->loanUserId = $loanUserId;
         }
     }
 ?>

@@ -14,15 +14,15 @@ spl_autoload_register( function($class) {
           require('./config/db.php');
           echo "Returning Book " . $bookId;
           $stmt = $pdo -> prepare('UPDATE books SET loan_user_id = -1 WHERE book_id = ?');
-          $stmt -> execute( [$userid, $bookId] );
+          $stmt -> execute( [$bookId] );
           //header( "refresh:5;url=admin.php" );
-          if ($userType="librarian") {
+          if ($userType=="librarian") {
             header( "Location: admin.php" );
-          } elseif  ($userType="member") {
+          } else {
             header( "Location: user.php" );
           }
         }
     } else {
-      echo "Not logged in"
+      echo "Not logged in";
     }
 ?>
