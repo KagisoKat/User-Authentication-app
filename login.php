@@ -3,11 +3,11 @@
 <?php
 session_start();
 
-spl_autoload_register( function($class) {
-  $classSplit=explode('\\', $class);
+spl_autoload_register(function ($class) {
+  $classSplit = explode('\\', $class);
   $path = 'classes/';
-  require_once  $path . $classSplit[0] . '/' . $classSplit[1] .'.php';
- });
+  require_once  $path . $classSplit[0] . '/' . $classSplit[1] . '.php';
+});
 
 
 if (isset($_POST['forgot'])) {
@@ -24,13 +24,13 @@ if (isset($_POST['login'])) {
   $stmt->execute([$userEmail]);
   $user_item = $stmt->FETCH();
   $user = new Library\User();
- if (isset($user_item)) {
-  $user->setId($user_item->id);
-  $user->setName($user_item->name);
-  $user->setEmail($user_item->email);
-  $user->setPassword($user_item->password);
-  $user->setRole($user_item->role);
- if (password_verify($password, $user->getPassword())) {
+  if (isset($user_item)) {
+    $user->setId($user_item->id);
+    $user->setName($user_item->name);
+    $user->setEmail($user_item->email);
+    $user->setPassword($user_item->password);
+    $user->setRole($user_item->role);
+    if (password_verify($password, $user->getPassword())) {
       echo "Password correct";
       $_SESSION['userId'] = $user->getId();
       $_SESSION['userType'] = $user->getRole();
